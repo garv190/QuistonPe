@@ -1,70 +1,116 @@
-# Getting Started with Create React App
+# QuistonPe
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Lightweight invoice manager built with React and Tailwind CSS.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Setup & Run
 
-### `npm start`
+### Prerequisites
+- Node.js v16+ (recommended)
+- npm or yarn
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Installation
+1. Clone the repo:
+   ```bash
+   git clone <repo-url>
+   cd quistonpe
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Run locally
+- Start dev server:
+  ```bash
+  npm start
+  # or
+  yarn start
+  ```
+  App will be available at http://localhost:3000
 
-### `npm test`
+### Build for production
+```bash
+npm run build
+# or
+yarn build
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Approach
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Component structure
+- `src/Components/`
+  - `InvoiceContext.js` — central state for invoices (localStorage persistence, helpers for status/days, and actions).
+  - `InvoicePage.js` — page that renders the invoice list and add modal.
+  - `InvoiceList.js` — search / filter / pagination + renders `InvoiceCard` or `InvoiceRow`.
+  - `InvoiceCard.js` / `InvoiceRow.js` — UI for invoice details (card and table layouts respectively).
+  - `AddInvoiceModal.js` / `NewInvoicePage.js` — create new invoices flow and validation.
+  - `SummaryPage.js`, `SummaryCards.js`, `InvoiceChart.js` — summary dashboard and charts.
+  - `ImageCarousel.js` — image/header area (handles dark-mode background corrections).
+  - `ExportCSV.js` — CSV export of invoices.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Optimization techniques used
+- useMemo in `InvoiceList` to avoid recalculating filtered & sorted lists on every render.
+- useCallback in `InvoiceContext` and components to memoize handlers passed as props.
+- Pagination (limits rendered items to a small page size).
+- LocalStorage caching to persist invoices and avoid re-fetch operations.
+- Simple, focused components for easier rendering boundaries.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Challenges faced
+- Ensuring dark mode styles matched image backgrounds in the carousel and improving readability.
+- Invoice/payment logic: handling missing or legacy `amountPaid` values and ensuring totals & summaries reflected actual payments.
+- Balancing responsive layout with compact UI elements for both mobile and desktop.
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Performance Optimizations
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Memoized expensive derived data:
+  - `useMemo` for filtered/sorted invoices so filtering and sorting only run when inputs change.
+- Stable callbacks:
+  - `useCallback` for functions used as dependencies or passed to child components (reduces needless re-renders).
+- Pagination:
+  - Limits DOM nodes rendered per page improving responsiveness on large datasets.
+- Local data normalization:
+  - Normalized invoice data on load (rounding, ensuring `amountPaid`) to prevent incorrect calculations and repeated conversions.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Why these choices:
+- They are lightweight, low-risk optimizations that provide real user-visible gains (faster filtering, less layout thrash) without much complexity.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## Data & Business Logic
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Invoice status is calculated from `dueDate` and `paymentDate`:
+  - `Paid` when `paymentDate` exists
+  - `Overdue` if due date is past and unpaid
+  - `Pending` otherwise
+- Payment tracking:
+  - `amountPaid` field added (defaults to `0`) and set to invoice amount when marking as paid (supports future partial payments).
+- Summary metrics (`totalOutstanding`, `totalOverdue`, `totalPaidThisMonth`) use `amountPaid` explicitly to avoid double-counting and to reflect partial payments accurately.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+## Time Breakdown (example estimates)
+- Design & Planning: 2 hours
+- Development: 6 hours
+- Testing & Debugging: 2 hours
+- Total: 10 hours
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+> These are suggested estimates — update them to reflect your actual timeline.
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## How to Contribute
+- Create a branch for your change: `git checkout -b feat/your-feature`
+- Make changes and add tests where appropriate
+- Open a PR and describe the change
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+If you'd like, I can add a section with screenshots, or generate a changelog and a short `CONTRIBUTING.md`. Tell me what else you want in the README and I'll update it.
