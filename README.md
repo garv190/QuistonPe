@@ -106,11 +106,6 @@ Why these choices:
 
 ---
 
-## How to Contribute
-- Create a branch for your change: `git checkout -b feat/your-feature`
-- Make changes and add tests where appropriate
-- Open a PR and describe the change
 
----
 
 
