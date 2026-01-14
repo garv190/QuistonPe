@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* When the 'dark' class is on the <html> element, force a black background and white text across the page */
+  html.dark, html.dark body, html.dark #root {
+    @apply bg-black text-white;
+  }
+}
