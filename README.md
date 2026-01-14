@@ -7,7 +7,7 @@ Lightweight invoice manager built with React and Tailwind CSS.
 ## Setup & Run
 
 ### Prerequisites
-- Node.js v16+ (recommended)
+- React js 
 - npm or yarn
 
 ### Installation
@@ -113,4 +113,4 @@ Why these choices:
 
 ---
 
-If you'd like, I can add a section with screenshots, or generate a changelog and a short `CONTRIBUTING.md`. Tell me what else you want in the README and I'll update it.
+
