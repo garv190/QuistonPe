@@ -102,7 +102,7 @@ Why these choices:
 - Testing & Debugging: 2 hours
 - Total: 10 hours
 
-> These are suggested estimates — update them to reflect your actual timeline.
+
 
 ---
 
